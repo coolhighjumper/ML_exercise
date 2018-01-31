@@ -1,0 +1,23 @@
+1.input的維度不固定，可以用normalization layer先標準化再接CNN
+  normalization layer是把數字標準化，input shape不會因此改變，此舉只是因為input_img顏色多變
+
+2.input_img ->CNN_model ->mask_img ->run-length-encoding ->submission result
+
+ref:https://www.kaggle.com/kmader/nuclei-overview-to-submission
+
+
+
+1.用openCV濾鏡圖片後，在定threshold把圖片二元化（非黑即白），結束！！
+2.不用openCV也可以做，只是閥值要好好定，不然自己寫濾鏡演算法
+
+ref:https://www.kaggle.com/javidimail/nuclei-detection-with-opencv
+    openCV教學：http://monkeycoding.com/?page_id=12 （GussianBlur and threshold）
+
+
+
+1.U-net
+    a.更有效率的運用有限的訓練資料
+
+ref:https://www.kaggle.com/keegil/keras-u-net-starter-lb-0-277
+    https://arxiv.org/pdf/1505.04597.pdf (U-net介紹)
+    https://zh-tw.coursera.org/learn/convolutional-neural-networks/lecture/6UnU4/convolutional-implementation-of-sliding-windows (sliding window convolutional neural network)
