@@ -1,6 +1,0 @@
-{
-    "editor.fontSize": 16,
-    "python.autoComplete.preloadModules": ["numpy", "pandas", "matplotlib"],
-    "python.linting.pylintEnabled": false,
-    "python.pythonPath": "/usr/local/bin/python3.6",
-}

@@ -41,7 +41,6 @@ z_mean=Dense(32)(dense2)
 z_log_var=Dense(32)(dense2)
 def sampling(args):
     z_mean, z_log_var = args
-    #epsilon是常態分布下亂數取出的noise
     epsilon = K.random_normal(shape=(K.shape(z_mean)[0], 1), mean=0.,
                               stddev=1)
     return z_mean + K.exp(z_log_var / 2) * epsilon
@@ -89,7 +88,7 @@ from keras import metrics
 class CustomVariationalLayer(Layer):
     def __init__(self, **kwargs):
         self.is_placeholder = True
-        # 呼叫Layer的建構子__init__
+
         super(CustomVariationalLayer, self).__init__(**kwargs)
 
     def vae_loss(self, input_img, x):
@@ -123,12 +122,41 @@ vae.save_weights('./vae3_weight.h5')'''
 encoded_imgs = encoder.predict(x_train)
 decoded_imgs = decoder.predict(encoded_imgs)
 hello=vae.predict(x_train)
+testImg = encoded_imgs[27]
 n = 10  # how many digits we will display
 plt.figure(figsize=(35, 10))
 for i in range(n):
     # display original
     ax = plt.subplot(3, n, i + 1)
-    imgplot = plt.imshow(x_train[0+i][:,:,])
+    imgplot = plt.imshow(x_train[20+i][:,:,])
+    #plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+
+    # display reconstruction
+    ax = plt.subplot(3, n, i + 1 + n)
+    imgplot = plt.imshow(decoded_imgs[20+i])
+    #plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    
+    ax = plt.subplot(3, n, i + 1 + 2*n)
+    imgplot = plt.imshow(hello[20+i])
+    #plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+plt.savefig('training_result.png')
+# plt.show()
+
+encoded_imgs = encoder.predict(x_test)
+decoded_imgs = decoder.predict(encoded_imgs)
+hello=vae.predict(x_test)
+n = 3  # how many digits we will display
+plt.figure(figsize=(35, 10))
+for i in range(n):
+    # display original
+    ax = plt.subplot(3, n, i + 1)
+    imgplot = plt.imshow(x_test[0+i][:,:,])
     #plt.gray()
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
@@ -145,11 +173,12 @@ for i in range(n):
     #plt.gray()
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
-plt.show()
+plt.savefig('test_result.png')
+# plt.show()
 
 import random
-base_img=encoded_imgs[151]
-grid=[-2+0.4*i for i in range(11)]
+base_img=testImg
+grid=[-3+0.6*i for i in range(11)]
 '''for i in range(30):
     base_img[2+i]=random.random()*2-1'''
 #base_img[2:]=1
@@ -160,13 +189,14 @@ for i in range(11):
     # display original
         ax = plt.subplot(11, n, 11*i +j+ 1)
         target_img=base_img.copy()
-        target_img[0]=grid[j]
-        target_img[1]=grid[i]
+        target_img[0]+=grid[i]
+        target_img[1]+=grid[j]
         result=decoder.predict(target_img.reshape((1,32)))
         result=result.reshape((32,32,4))
         imgplot = plt.imshow(result)
         #plt.gray()
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
-plt.show()
+plt.savefig('generate.png')
+# plt.show()
 
